@@ -1,11 +1,12 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from '@next/font/google'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.css';
+import {Box,Avatar,Heading,Button,Tag} from "@chakra-ui/react"
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function Home({gitData}) {
+ 
   return (
     <>
       <Head>
@@ -15,109 +16,59 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.js</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
+        <div key={gitData.id} className={styles.description}>
+          <Box display="flex" >
+            <Box w="50%">
+              <Box w="60%" textAlign="center" bgColor="cyan" p="20px" >
+                <Avatar name="Fahad Arif" src={gitData.avatar_url} size="2xl" />
+                <Heading as="h2">{gitData.name}</Heading>
+                <Heading as="h4" size="md">{gitData.login}</Heading>
+                <p   >HTML | CSS | JavaScript | NextJS | Redux | ReactJS | NodeJS</p>
+                <Button bgColor="black" color="white" mr="15px">Resume</Button>
+                <Button bgColor="black" color="white">Follow</Button>
 
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
+              </Box>
+              <Box>
+              <Heading as="h2">Tech Stack</Heading>
+              <Box display="flex" flexWrap="wrap" width="250px">
+{
+  ["HTML","CSS","JavaScript","React","Redux","Chakra","NextJS","NodeJS"].map((item)=>{
+    return <Tag key={item} mr="10px" mt="10px" variant="subtle" >{item}</Tag>
+  })
+}
+              </Box>
+              </Box>
+              <Box>
+              <Heading as="h2">About me</Heading>
+              <p>{gitData.bio}</p>
+              </Box>
+            </Box>
+          <Box>
+          <Heading as="h2">Education</Heading>
+          <Box>
+            <p>Masai School (Full Time)</p>
+            <p>May 2022 - Present</p>
+          </Box>
+          <Box>
+            <p>Higher Secondary Education</p>
+            <p>May 2021 - May 2022</p>
+          </Box>
+          </Box>
+          </Box>
         </div>
       </main>
     </>
   )
+}
+
+
+export async function getStaticProps(){
+  let res=await fetch("https://api.github.com/users/fahad9988");
+  let data=await res.json();
+
+  return {
+    props:{
+      gitData:data
+    }
+  }
 }
